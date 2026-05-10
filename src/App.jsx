@@ -15,6 +15,36 @@ const ExternalLinkIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
 );
 
+const TIMELINE = [
+  {
+    id: 1,
+    year: '2024 - 2028',
+    role: 'B.Tech in Computer Science',
+    company: 'Woxsen University',
+    desc: 'Focusing on core computer science fundamentals, artificial intelligence, and software engineering. Engaging in practical project-based learning.',
+    type: 'education',
+    icon: '🎓'
+  },
+  {
+    id: 2,
+    year: '2026',
+    role: 'Frontend Developer Intern',
+    company: 'Tech Innovators',
+    desc: 'Developed responsive web applications using React and Tailwind CSS. Improved page load speeds by 20% through code splitting.',
+    type: 'experience',
+    icon: '💼'
+  },
+  {
+    id: 3,
+    year: '2023 - 2024',
+    role: 'Freelance Web Developer',
+    company: 'Self-Employed',
+    desc: 'Designed and built custom portfolios and landing pages for local businesses using HTML, CSS, and modern JavaScript.',
+    type: 'experience',
+    icon: '🚀'
+  }
+];
+
 const PROJECTS = [
   {
     id: 1,
@@ -188,6 +218,29 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('All');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
+  const [showFloating, setShowFloating] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowFloating(window.scrollY > 400);
+
+      const sections = ['home', 'about', 'skills', 'experience', 'projects', 'certifications', 'contact'];
+      for (const section of sections.reverse()) {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.top <= window.innerHeight / 3) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -375,11 +428,12 @@ const App = () => {
           <span></span><span></span><span></span>
         </button>
         <ul className={`nav-links ${isMobileMenuOpen ? 'active' : ''}`}>
-          <li><a href="#about" onClick={() => setIsMobileMenuOpen(false)}>About</a></li>
-          <li><a href="#skills" onClick={() => setIsMobileMenuOpen(false)}>Skills</a></li>
-          <li><a href="#projects" onClick={() => setIsMobileMenuOpen(false)}>Work</a></li>
-          <li><a href="#certifications" onClick={() => setIsMobileMenuOpen(false)}>Certs</a></li>
-          <li><a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>Contact</a></li>
+          <li><a href="#about" className={activeSection === 'about' ? 'active' : ''} onClick={() => setIsMobileMenuOpen(false)}>About</a></li>
+          <li><a href="#skills" className={activeSection === 'skills' ? 'active' : ''} onClick={() => setIsMobileMenuOpen(false)}>Skills</a></li>
+          <li><a href="#experience" className={activeSection === 'experience' ? 'active' : ''} onClick={() => setIsMobileMenuOpen(false)}>Experience</a></li>
+          <li><a href="#projects" className={activeSection === 'projects' ? 'active' : ''} onClick={() => setIsMobileMenuOpen(false)}>Work</a></li>
+          <li><a href="#certifications" className={activeSection === 'certifications' ? 'active' : ''} onClick={() => setIsMobileMenuOpen(false)}>Certs</a></li>
+          <li><a href="#contact" className={activeSection === 'contact' ? 'active' : ''} onClick={() => setIsMobileMenuOpen(false)}>Contact</a></li>
         </ul>
       </nav>
 
@@ -452,6 +506,29 @@ const App = () => {
                       <div className="skill-back-label">Proficiency</div>
                       <div className="skill-back-tag">{skill.tags}</div>
                     </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* EXPERIENCE & EDUCATION */}
+        <section id="experience">
+          <div className="container">
+            <div className="section-label s-up d0">Journey</div>
+            <h2 className="section-title s-up d1">Experience & Education</h2>
+            
+            <div className="timeline">
+              <div className="timeline-line"></div>
+              {TIMELINE.map((item, i) => (
+                <div key={item.id} className={`timeline-item ${i % 2 === 0 ? 'left' : 'right'} s-up d${i + 1}`}>
+                  <div className="timeline-node">{item.icon}</div>
+                  <div className="timeline-content">
+                    <div className="timeline-year">{item.year}</div>
+                    <div className="timeline-role">{item.role}</div>
+                    <div className="timeline-company">{item.company}</div>
+                    <div className="timeline-desc">{item.desc}</div>
                   </div>
                 </div>
               ))}
@@ -594,6 +671,16 @@ const App = () => {
           </div>
         </div>
       )}
+
+      {/* FLOATING ACTIONS */}
+      <div className={`floating-actions ${showFloating ? 'visible' : ''}`}>
+        <a href="https://wa.me/910000000000" target="_blank" rel="noreferrer" className="float-btn float-wa" aria-label="WhatsApp">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </a>
+        <button className="float-btn float-top" onClick={() => window.scrollTo({top:0, behavior:'smooth'})} aria-label="Back to Top">
+          ↑
+        </button>
+      </div>
 
       <footer><p>© {new Date().getFullYear()} <span>Sunhith Kande</span> · Designed & built with precision</p></footer>
     </>
