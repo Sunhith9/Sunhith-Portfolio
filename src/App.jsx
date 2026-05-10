@@ -187,20 +187,6 @@ const App = () => {
   const [formStatus, setFormStatus] = useState('idle');
   const [isLoading, setIsLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('All');
-  
-  const cursorRef = useRef(null);
-  const cursorDotRef = useRef(null);
-
-  useEffect(() => {
-    const onMouseMove = (e) => {
-      if (cursorRef.current && cursorDotRef.current) {
-        cursorRef.current.style.transform = `translate3d(${e.clientX - 16}px, ${e.clientY - 16}px, 0)`;
-        cursorDotRef.current.style.transform = `translate3d(${e.clientX - 4}px, ${e.clientY - 4}px, 0)`;
-      }
-    };
-    window.addEventListener('mousemove', onMouseMove);
-    return () => window.removeEventListener('mousemove', onMouseMove);
-  }, []);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -381,9 +367,6 @@ const App = () => {
       <div className={`splash-loader ${isLoading ? '' : 'hidden'}`}>
         <div className="loader-logo">SK</div>
       </div>
-      
-      <div className="custom-cursor" ref={cursorRef}></div>
-      <div className="custom-cursor-dot" ref={cursorDotRef}></div>
 
       <nav>
         <a href="#" className="nav-logo">SK</a>
