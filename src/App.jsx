@@ -184,6 +184,34 @@ const SKILLS = [
 
 const App = () => {
   const [activeCert, setActiveCert] = useState(null);
+  const [formStatus, setFormStatus] = useState('idle');
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    setFormStatus('submitting');
+    const form = e.target;
+    
+    try {
+      const response = await fetch('https://formsubmit.co/ajax/sunhithk9768@gmail.com', {
+        method: 'POST',
+        body: new FormData(form),
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+      if (response.ok) {
+        setFormStatus('success');
+        form.reset();
+        setTimeout(() => setFormStatus('idle'), 4000);
+      } else {
+        setFormStatus('error');
+        setTimeout(() => setFormStatus('idle'), 4000);
+      }
+    } catch (error) {
+      setFormStatus('error');
+      setTimeout(() => setFormStatus('idle'), 4000);
+    }
+  };
   const avatarCardRef = useRef(null);
   const avatarWrapRef = useRef(null);
 
@@ -471,7 +499,7 @@ const App = () => {
             <div className="contact-card s-zoom d2">
               <a href="mailto:sunhithk9768@gmail.com" className="contact-email">sunhithk9768@gmail.com</a>
               
-              <form action="https://formsubmit.co/sunhithk9768@gmail.com" method="POST" className="contact-form">
+              <form onSubmit={handleFormSubmit} className="contact-form">
                 <input type="hidden" name="_subject" value="New Portfolio Contact!" />
                 <div className="form-group">
                   <label htmlFor="name">Name</label>
@@ -486,7 +514,9 @@ const App = () => {
                   <textarea id="message" name="message" className="form-control" placeholder="Tell me about your project..." required></textarea>
                 </div>
                 <div className="form-group full">
-                  <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>Send Message 🚀</button>
+                  <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} disabled={formStatus === 'submitting' || formStatus === 'success'}>
+                    {formStatus === 'submitting' ? 'Sending...' : formStatus === 'success' ? 'Message Sent! ✅' : formStatus === 'error' ? 'Failed! Try Again ❌' : 'Send Message 🚀'}
+                  </button>
                 </div>
               </form>
 
