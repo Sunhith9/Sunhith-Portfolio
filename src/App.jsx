@@ -212,30 +212,6 @@ const SKILLS = [
   { icon: '🚀', name: 'Performance & Dev', desc: 'Optimizing for Core Web Vitals, SEO, and developer experience.', pct: 85, tags: 'Vite · SEO · Git' },
 ];
 
-const TESTIMONIALS = [
-  {
-    id: 1,
-    name: 'Sarah Jenkins',
-    role: 'Product Manager',
-    text: 'Sunhith is an incredibly talented developer. He delivered our project ahead of schedule and the code quality was exceptional. Highly recommended!',
-    rating: 5
-  },
-  {
-    id: 2,
-    name: 'David Chen',
-    role: 'Lead Engineer',
-    text: 'Working with Sunhith was a breeze. He has a deep understanding of frontend architectures and brings a great design sensibility to the table.',
-    rating: 5
-  },
-  {
-    id: 3,
-    name: 'Emily Rodriguez',
-    role: 'Startup Founder',
-    text: 'The portfolios and dashboards Sunhith built for us look absolutely stunning. He has a great eye for modern UI trends and performance.',
-    rating: 5
-  }
-];
-
 const App = () => {
   const [activeCert, setActiveCert] = useState(null);
   const [formStatus, setFormStatus] = useState('idle');
@@ -665,32 +641,6 @@ const App = () => {
                     <span className="coursera-badge">Coursera</span> · {cert.issuer}
                   </p>
                   <div className="cert-link-hint">View PDF ↗</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* TESTIMONIALS */}
-        <section id="testimonials">
-          <div className="container">
-            <div className="section-label s-up d0">Feedback</div>
-            <h2 className="section-title s-up d1">What people say</h2>
-            
-            <div className="testimonials-slider s-up d2">
-              {TESTIMONIALS.map((testimonial) => (
-                <div key={testimonial.id} className="testimonial-card">
-                  <div className="testimonial-stars">
-                    {'★'.repeat(testimonial.rating)}
-                  </div>
-                  <p className="testimonial-text">"{testimonial.text}"</p>
-                  <div className="testimonial-author">
-                    <div className="testimonial-avatar">{testimonial.name.charAt(0)}</div>
-                    <div>
-                      <div className="testimonial-name">{testimonial.name}</div>
-                      <div className="testimonial-role">{testimonial.role}</div>
-                    </div>
-                  </div>
                 </div>
               ))}
             </div>
