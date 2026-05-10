@@ -212,6 +212,43 @@ const SKILLS = [
   { icon: '🚀', name: 'Performance & Dev', desc: 'Optimizing for Core Web Vitals, SEO, and developer experience.', pct: 85, tags: 'Vite · SEO · Git' },
 ];
 
+const SERVICES = [
+  {
+    icon: '💻',
+    title: 'Frontend Development',
+    desc: 'Crafting pixel-perfect, responsive, and accessible user interfaces using React, Next.js, and modern CSS frameworks.'
+  },
+  {
+    icon: '⚙️',
+    title: 'Full Stack Solutions',
+    desc: 'Building end-to-end applications with robust Node.js/Python backends, RESTful APIs, and secure database architectures.'
+  },
+  {
+    icon: '✨',
+    title: 'UI/UX Design',
+    desc: 'Designing intuitive user experiences and premium aesthetics with a focus on modern trends like glassmorphism and micro-animations.'
+  }
+];
+
+const FAQS = [
+  {
+    q: 'What technologies do you specialize in?',
+    a: 'My core stack includes React, Next.js, TypeScript, and Tailwind CSS on the frontend. For backends, I frequently use Node.js, Express, and Python (FastAPI).'
+  },
+  {
+    q: 'Are you available for freelance work?',
+    a: 'Yes, I am currently open to taking on new freelance projects and contract roles. Feel free to reach out via the contact form below.'
+  },
+  {
+    q: 'How do you ensure code quality?',
+    a: 'I strictly follow clean code principles, implement thorough testing, and use tools like ESLint and Prettier. I also prioritize Web Vitals and accessibility.'
+  },
+  {
+    q: 'Can you work with hardware or IoT?',
+    a: 'Absolutely! I have experience with Arduino and C programming, allowing me to bridge the gap between software interfaces and physical hardware.'
+  }
+];
+
 const App = () => {
   const [activeCert, setActiveCert] = useState(null);
   const [formStatus, setFormStatus] = useState('idle');
@@ -221,6 +258,14 @@ const App = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [showFloating, setShowFloating] = useState(false);
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+  const [openFaq, setOpenFaq] = useState(null);
+
+  // Apply Theme
+  useEffect(() => {
+    document.body.className = theme === 'light' ? 'light-theme' : '';
+    localStorage.setItem('theme', theme);
+  }, [theme]);
 
   // Magnetic Buttons
   useEffect(() => {
@@ -459,11 +504,16 @@ const App = () => {
         </button>
         <ul className={`nav-links ${isMobileMenuOpen ? 'active' : ''}`}>
           <li><a href="#about" className={activeSection === 'about' ? 'active' : ''} onClick={() => setIsMobileMenuOpen(false)}>About</a></li>
+          <li><a href="#services" className={activeSection === 'services' ? 'active' : ''} onClick={() => setIsMobileMenuOpen(false)}>Services</a></li>
           <li><a href="#skills" className={activeSection === 'skills' ? 'active' : ''} onClick={() => setIsMobileMenuOpen(false)}>Skills</a></li>
           <li><a href="#experience" className={activeSection === 'experience' ? 'active' : ''} onClick={() => setIsMobileMenuOpen(false)}>Experience</a></li>
           <li><a href="#projects" className={activeSection === 'projects' ? 'active' : ''} onClick={() => setIsMobileMenuOpen(false)}>Work</a></li>
-          <li><a href="#certifications" className={activeSection === 'certifications' ? 'active' : ''} onClick={() => setIsMobileMenuOpen(false)}>Certs</a></li>
           <li><a href="#contact" className={activeSection === 'contact' ? 'active' : ''} onClick={() => setIsMobileMenuOpen(false)}>Contact</a></li>
+          <li>
+            <button className="theme-toggle magnetic" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} aria-label="Toggle theme">
+              {theme === 'dark' ? '☀️' : '🌙'}
+            </button>
+          </li>
         </ul>
       </nav>
 
@@ -508,6 +558,25 @@ const App = () => {
                 </div>
                 <div className="avatar-floating-tag">⚡ Open to work</div>
               </div>
+            </div>
+          </div>
+        </section>
+
+
+
+        {/* SERVICES */}
+        <section id="services">
+          <div className="container">
+            <div className="section-label s-up d0">What I do</div>
+            <h2 className="section-title s-up d1">My Services</h2>
+            <div className="services-grid s-up d2">
+              {SERVICES.map((srv, i) => (
+                <div key={i} className="service-card">
+                  <div className="service-icon">{srv.icon}</div>
+                  <h3 className="service-title">{srv.title}</h3>
+                  <p className="service-desc">{srv.desc}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -641,6 +710,27 @@ const App = () => {
                     <span className="coursera-badge">Coursera</span> · {cert.issuer}
                   </p>
                   <div className="cert-link-hint">View PDF ↗</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* FAQS */}
+        <section id="faq">
+          <div className="container">
+            <div className="section-label s-up d0">FAQ</div>
+            <h2 className="section-title s-up d1">Common Questions</h2>
+            <div className="faq-list s-up d2">
+              {FAQS.map((faq, i) => (
+                <div key={i} className={`faq-item ${openFaq === i ? 'open' : ''}`}>
+                  <button className="faq-question magnetic" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
+                    {faq.q}
+                    <span className="faq-icon">{openFaq === i ? '−' : '+'}</span>
+                  </button>
+                  <div className="faq-answer-wrapper">
+                    <div className="faq-answer">{faq.a}</div>
+                  </div>
                 </div>
               ))}
             </div>
