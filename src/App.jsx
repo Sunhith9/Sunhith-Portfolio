@@ -21,7 +21,7 @@ const PROJECTS = [
     title: 'Digital Asset Protection',
     category: 'Full Stack',
     desc: 'AI-powered forensic tool to detect copyright violations for sports media — with DMCA takedown generation and Gemini AI integration.',
-    icon: '🛡️',
+    image: '/projects/project1.png',
     tech: ['React', 'FastAPI', 'Supabase', 'Python'],
     github: 'https://github.com/Sunhith9/Digital-Asset-Protection',
     demo: '#'
@@ -31,7 +31,7 @@ const PROJECTS = [
     title: 'Woxsen Grievance System',
     category: 'Full Stack',
     desc: 'Student grievance submission & tracking platform for Woxsen University — complaint management, admin dashboard, and status monitoring.',
-    icon: '📝',
+    image: '/projects/project2.png',
     tech: ['HTML/CSS', 'JavaScript', 'Python'],
     github: 'https://github.com/Sunhith9/Woxsen-Grievance-System',
     demo: '#'
@@ -41,7 +41,7 @@ const PROJECTS = [
     title: 'PBL Portal',
     category: 'Full Stack',
     desc: 'Portal to manage project-based learning activities, resources, and academic workflows. Focused on user navigation and information accessibility.',
-    icon: '🎓',
+    image: '/projects/project3.png',
     tech: ['HTML', 'CSS', 'JavaScript'],
     github: 'https://github.com/Sunhith9/PBL-Portal',
     demo: '#'
@@ -51,7 +51,7 @@ const PROJECTS = [
     title: 'Task Expense Tracker',
     category: 'Frontend',
     desc: 'App to manage tasks and track expenses with structured records — improved day-to-day productivity and data monitoring workflows.',
-    icon: '📊',
+    image: '/projects/project4.png',
     tech: ['JavaScript', 'CSS', 'HTML'],
     github: 'https://github.com/Sunhith9/task-expense-tracker',
     demo: '#'
@@ -61,7 +61,7 @@ const PROJECTS = [
     title: 'AI-Powered Tools Website',
     category: 'Full Stack',
     desc: 'Built using OpenAI GPT API for content rewriting and assistance. Dynamic tool interface with real-time AI-generated output.',
-    icon: '🤖',
+    image: '/projects/project5.png',
     tech: ['JavaScript', 'OpenAI API', 'CSS'],
     github: 'https://github.com/Sunhith9/AI-Powered-Tools',
     demo: '#'
@@ -71,7 +71,7 @@ const PROJECTS = [
     title: 'Haunted Mansion Escape Game',
     category: 'Frontend',
     desc: 'Route Planning System using pathfinding logic — interactive UI with dynamic room navigation and escape puzzles.',
-    icon: '👻',
+    image: '/projects/project6.png',
     tech: ['JavaScript', 'CSS', 'Algorithms'],
     github: 'https://github.com/Sunhith9/Haunted-Mansion-Escape',
     demo: '#'
@@ -81,7 +81,7 @@ const PROJECTS = [
     title: 'Racing Replay System',
     category: 'Frontend',
     desc: 'Real-time race event tracking with playback controls — data visualization for race replays with smooth UI.',
-    icon: '🏎️',
+    image: '/projects/project7.png',
     tech: ['JavaScript', 'CSS', 'HTML'],
     github: 'https://github.com/Sunhith9/f1-race-replay',
     demo: '#'
@@ -91,7 +91,7 @@ const PROJECTS = [
     title: 'Arduino Remote Car',
     category: 'UI',
     desc: 'Remote-controlled car using Arduino Uno — motor interfacing, control logic, and hardware-software integration.',
-    icon: '🚗',
+    image: '/projects/project8.png',
     tech: ['Arduino', 'C', 'Hardware'],
     github: 'https://github.com/Sunhith9/Arduino-Remote-Car',
     demo: '#'
@@ -187,6 +187,7 @@ const App = () => {
   const [formStatus, setFormStatus] = useState('idle');
   const [isLoading, setIsLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('All');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -370,12 +371,15 @@ const App = () => {
 
       <nav>
         <a href="#" className="nav-logo">SK</a>
-        <ul className="nav-links">
-          <li><a href="#about">About</a></li>
-          <li><a href="#skills">Skills</a></li>
-          <li><a href="#projects">Work</a></li>
-          <li><a href="#certifications">Certs</a></li>
-          <li><a href="#contact">Contact</a></li>
+        <button className={`hamburger ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+          <span></span><span></span><span></span>
+        </button>
+        <ul className={`nav-links ${isMobileMenuOpen ? 'active' : ''}`}>
+          <li><a href="#about" onClick={() => setIsMobileMenuOpen(false)}>About</a></li>
+          <li><a href="#skills" onClick={() => setIsMobileMenuOpen(false)}>Skills</a></li>
+          <li><a href="#projects" onClick={() => setIsMobileMenuOpen(false)}>Work</a></li>
+          <li><a href="#certifications" onClick={() => setIsMobileMenuOpen(false)}>Certs</a></li>
+          <li><a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>Contact</a></li>
         </ul>
       </nav>
 
@@ -408,6 +412,10 @@ const App = () => {
                   <div className="stat s-flip d1"><div className="stat-num">3+</div><div className="stat-label">Years Exp.</div></div>
                   <div className="stat s-flip d2"><div className="stat-num">20+</div><div className="stat-label">Projects</div></div>
                   <div className="stat s-flip d3"><div className="stat-num">10+</div><div className="stat-label">Certs</div></div>
+                </div>
+                <div className="github-chart-container s-up d4">
+                  <div className="github-chart-title">GitHub Contributions</div>
+                  <img src="https://ghchart.rshah.org/6c63ff/Sunhith9" alt="Sunhith's GitHub chart" />
                 </div>
               </div>
               <div className="avatar-wrap s-right d1" ref={avatarWrapRef}>
@@ -472,8 +480,12 @@ const App = () => {
             <div className="projects-grid">
               {PROJECTS.filter(p => activeFilter === 'All' || p.category === activeFilter).map((project, i) => (
                 <div key={project.id} className={`project-card ${i === 0 ? 's-up' : (i % 2 === 0 ? 's-right' : 's-left')} d${i + 2}`}>
-                  <div className="project-number">0{i + 1} {i === 0 ? '— Featured' : ''}</div>
-                  <div className="project-title">{project.title}</div>
+                  <div className="project-image-wrap">
+                    <img src={project.image} alt={project.title} className="project-image" />
+                    <div className="project-number">0{i + 1} {i === 0 ? '— Featured' : ''}</div>
+                  </div>
+                  <div className="project-content">
+                    <div className="project-title">{project.title}</div>
                   <div className="project-desc">{project.desc}</div>
                   <div className="project-tags">
                     {project.tech.map(t => <span key={t} className="tag">{t}</span>)}
@@ -481,6 +493,7 @@ const App = () => {
                   <div className="project-links">
                     <a href={project.demo} className={`project-link ${project.demo === '#' ? 'muted' : ''}`}>Live Demo →</a>
                     <a href={project.github} target="_blank" rel="noreferrer" className="project-link muted">GitHub ↗</a>
+                  </div>
                   </div>
                 </div>
               ))}

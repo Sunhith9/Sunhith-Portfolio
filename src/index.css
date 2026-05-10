@@ -249,7 +249,10 @@ nav {
 .project-card:hover { transform: translateY(-8px) rotateX(2deg) rotateY(-1deg); border-color: var(--accent2); box-shadow: 0 30px 80px rgba(0, 0, 0, .5), 0 0 60px var(--glow2); }
 .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--accent2), transparent); opacity: 0; transition: opacity .35s; }
 .project-card:hover::before { opacity: 1; }
-.project-number { font-family: 'DM Mono', monospace; font-size: .7rem; color: var(--muted); letter-spacing: .1em; margin-bottom: 1.25rem; }
+.project-image-wrap { margin: -2.5rem -2.5rem 2rem -2.5rem; overflow: hidden; position: relative; border-bottom: 1px solid var(--border); }
+.project-image { width: 100%; height: 220px; object-fit: cover; transition: transform .5s cubic-bezier(.16, 1, .3, 1); }
+.project-card:hover .project-image { transform: scale(1.05); }
+.project-number { position: absolute; top: 1.5rem; left: 1.5rem; background: rgba(5,5,8,0.75); backdrop-filter: blur(8px); padding: 0.4rem 1rem; border-radius: 100px; border: 1px solid var(--border); font-family: 'DM Mono', monospace; font-size: .7rem; color: var(--text); letter-spacing: .1em; margin-bottom: 0; }
 .project-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.5rem; letter-spacing: -.02em; margin-bottom: .75rem; }
 .project-desc { font-size: .92rem; color: rgba(232, 232, 240, .6); line-height: 1.75; margin-bottom: 1.75rem; }
 .project-tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 2rem; }
@@ -326,6 +329,19 @@ footer span { color: var(--text); }
 .filter-btn:hover { border-color: var(--accent); color: var(--text); box-shadow: 0 0 15px var(--glow); }
 .filter-btn.active { background: rgba(108, 99, 255, 0.1); border-color: var(--accent); color: var(--text); box-shadow: 0 0 20px var(--glow); }
 
+/* ══ GITHUB CHART ══ */
+.github-chart-container { margin-top: 3rem; background: rgba(108, 99, 255, 0.03); border: 1px solid var(--border); border-radius: 20px; padding: 2rem; overflow-x: auto; text-align: center; }
+.github-chart-title { font-family: 'DM Mono', monospace; font-size: .75rem; color: var(--accent2); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 1.5rem; }
+.github-chart-container img { width: 100%; min-width: 600px; opacity: 0.85; filter: drop-shadow(0 0 15px rgba(108, 99, 255, 0.2)); transition: opacity 0.3s; }
+.github-chart-container:hover img { opacity: 1; }
+
+/* ══ MOBILE MENU ══ */
+.hamburger { display: none; background: transparent; border: none; cursor: pointer; padding: 0.5rem; z-index: 101; flex-direction: column; gap: 6px; }
+.hamburger span { width: 28px; height: 2px; background: var(--text); transition: all 0.3s cubic-bezier(.16, 1, .3, 1); border-radius: 2px; }
+.hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); background: var(--accent2); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); background: var(--accent2); }
+
 /* ══ ANIMATIONS ══ */
 @keyframes gShift { 0%, 100% { background-position: 0% 50% } 50% { background-position: 100% 50% } }
 @keyframes sPulse { 0%, 100% { opacity: .3 } 50% { opacity: 1 } }
@@ -340,7 +356,10 @@ footer span { color: var(--text); }
   .contact-form { grid-template-columns: 1fr; }
 }
 @media (max-width: 768px) {
-  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .nav-links { position: fixed; inset: 0; background: rgba(5,5,8,0.98); backdrop-filter: blur(20px); flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; z-index: 100; opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(.16, 1, .3, 1); transform: translateY(-20px); }
+  .nav-links.active { opacity: 1; visibility: visible; transform: translateY(0); }
+  .nav-links a { font-size: 1.2rem; }
   section { padding: 6rem 1.5rem; }
   .hero-title { font-size: clamp(3rem, 12vw, 5rem); }
   .about-stats { grid-template-columns: repeat(2, 1fr); }
