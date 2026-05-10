@@ -439,4 +439,7 @@ footer span { color: var(--text); }
   .timeline-item.left { left: 0; }
   .timeline-item.right { left: 0; }
   .timeline-item.left .timeline-node, .timeline-item.right .timeline-node { left: 10px; right: auto; }
+  .faq-question { padding: 1.25rem 1rem; font-size: 1rem; }
+  .faq-answer { padding: 0 1rem; }
+  .faq-item.open .faq-answer { padding: 0 1rem 1.25rem; }
 }
