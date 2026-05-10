@@ -185,6 +185,22 @@ const SKILLS = [
 const App = () => {
   const [activeCert, setActiveCert] = useState(null);
   const [formStatus, setFormStatus] = useState('idle');
+  const [isLoading, setIsLoading] = useState(true);
+  const [activeFilter, setActiveFilter] = useState('All');
+  
+  const cursorRef = useRef(null);
+  const cursorDotRef = useRef(null);
+
+  useEffect(() => {
+    const onMouseMove = (e) => {
+      if (cursorRef.current && cursorDotRef.current) {
+        cursorRef.current.style.transform = `translate3d(${e.clientX - 16}px, ${e.clientY - 16}px, 0)`;
+        cursorDotRef.current.style.transform = `translate3d(${e.clientX - 4}px, ${e.clientY - 4}px, 0)`;
+      }
+    };
+    window.addEventListener('mousemove', onMouseMove);
+    return () => window.removeEventListener('mousemove', onMouseMove);
+  }, []);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -293,6 +309,8 @@ const App = () => {
     };
     loop();
 
+    setTimeout(() => setIsLoading(false), 1500);
+
     return () => {
       cancelAnimationFrame(req);
       window.removeEventListener('mousemove', onMouseMove);
@@ -360,6 +378,13 @@ const App = () => {
 
   return (
     <>
+      <div className={`splash-loader ${isLoading ? '' : 'hidden'}`}>
+        <div className="loader-logo">SK</div>
+      </div>
+      
+      <div className="custom-cursor" ref={cursorRef}></div>
+      <div className="custom-cursor-dot" ref={cursorDotRef}></div>
+
       <nav>
         <a href="#" className="nav-logo">SK</a>
         <ul className="nav-links">
@@ -448,8 +473,21 @@ const App = () => {
           <div className="container">
             <div className="section-label s-up d0">Work</div>
             <h2 className="section-title s-up d1">Selected projects</h2>
+            
+            <div className="project-filter-row s-up d1">
+              {['All', 'Full Stack', 'Frontend', 'UI', 'Hardware'].map(cat => (
+                <button 
+                  key={cat} 
+                  className={`filter-btn ${activeFilter === cat ? 'active' : ''}`}
+                  onClick={() => setActiveFilter(cat)}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+
             <div className="projects-grid">
-              {PROJECTS.map((project, i) => (
+              {PROJECTS.filter(p => activeFilter === 'All' || p.category === activeFilter).map((project, i) => (
                 <div key={project.id} className={`project-card ${i === 0 ? 's-up' : (i % 2 === 0 ? 's-right' : 's-left')} d${i + 2}`}>
                   <div className="project-number">0{i + 1} {i === 0 ? '— Featured' : ''}</div>
                   <div className="project-title">{project.title}</div>
@@ -523,7 +561,7 @@ const App = () => {
               <div className="social-links">
                 <a href="https://github.com/Sunhith9" target="_blank" rel="noreferrer" className="social-link">GitHub</a>
                 <a href="https://www.linkedin.com/in/kande-sunhith-10aa1b326" target="_blank" rel="noreferrer" className="social-link">LinkedIn</a>
-                <a href="#" className="social-link">Resume ↓</a>
+                <a href="/resume/resume.pdf" download className="social-link">Resume ↓</a>
               </div>
             </div>
           </div>
