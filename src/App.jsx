@@ -212,14 +212,68 @@ const SKILLS = [
   { icon: '🚀', name: 'Performance & Dev', desc: 'Optimizing for Core Web Vitals, SEO, and developer experience.', pct: 85, tags: 'Vite · SEO · Git' },
 ];
 
+const TESTIMONIALS = [
+  {
+    id: 1,
+    name: 'Sarah Jenkins',
+    role: 'Product Manager',
+    text: 'Sunhith is an incredibly talented developer. He delivered our project ahead of schedule and the code quality was exceptional. Highly recommended!',
+    rating: 5
+  },
+  {
+    id: 2,
+    name: 'David Chen',
+    role: 'Lead Engineer',
+    text: 'Working with Sunhith was a breeze. He has a deep understanding of frontend architectures and brings a great design sensibility to the table.',
+    rating: 5
+  },
+  {
+    id: 3,
+    name: 'Emily Rodriguez',
+    role: 'Startup Founder',
+    text: 'The portfolios and dashboards Sunhith built for us look absolutely stunning. He has a great eye for modern UI trends and performance.',
+    rating: 5
+  }
+];
+
 const App = () => {
   const [activeCert, setActiveCert] = useState(null);
   const [formStatus, setFormStatus] = useState('idle');
   const [isLoading, setIsLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [showFloating, setShowFloating] = useState(false);
+
+  // Magnetic Buttons
+  useEffect(() => {
+    const magnetics = document.querySelectorAll('.magnetic');
+    const mouseMoves = [];
+    const mouseLeaves = [];
+
+    magnetics.forEach((btn, i) => {
+      mouseMoves[i] = (e) => {
+        const position = btn.getBoundingClientRect();
+        const x = e.clientX - position.left - position.width / 2;
+        const y = e.clientY - position.top - position.height / 2;
+        btn.style.transform = `translate(${x * 0.3}px, ${y * 0.5}px)`;
+      };
+      mouseLeaves[i] = () => {
+        btn.style.transform = 'translate(0px, 0px)';
+      };
+
+      btn.addEventListener('mousemove', mouseMoves[i]);
+      btn.addEventListener('mouseleave', mouseLeaves[i]);
+    });
+
+    return () => {
+      magnetics.forEach((btn, i) => {
+        btn.removeEventListener('mousemove', mouseMoves[i]);
+        btn.removeEventListener('mouseleave', mouseLeaves[i]);
+      });
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -447,8 +501,8 @@ const App = () => {
           </h1>
           <p className="hero-sub">Frontend developer crafting immersive, high-performance web experiences that live at the intersection of design and engineering.</p>
           <div className="hero-cta">
-            <a href="#projects" className="btn btn-primary">View Work →</a>
-            <a href="#contact" className="btn btn-outline">Get in Touch</a>
+            <a href="#projects" className="btn btn-primary magnetic">View Work →</a>
+            <a href="#contact" className="btn btn-outline magnetic">Get in Touch</a>
           </div>
           <div className="scroll-hint"><span>Scroll</span><div className="scroll-line"></div></div>
         </section>
@@ -541,12 +595,22 @@ const App = () => {
           <div className="container">
             <div className="section-label s-up d0">Work</div>
             <h2 className="section-title s-up d1">Selected projects</h2>
+            <div className="project-search-wrap s-up d1">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input 
+                type="text" 
+                placeholder="Search projects by name or tech..." 
+                className="project-search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
             
             <div className="project-filter-row s-up d1">
               {['All', 'Full Stack', 'Frontend', 'UI', 'Hardware'].map(cat => (
                 <button 
                   key={cat} 
-                  className={`filter-btn ${activeFilter === cat ? 'active' : ''}`}
+                  className={`filter-btn magnetic ${activeFilter === cat ? 'active' : ''}`}
                   onClick={() => setActiveFilter(cat)}
                 >
                   {cat}
@@ -555,7 +619,13 @@ const App = () => {
             </div>
 
             <div className="projects-grid">
-              {PROJECTS.filter(p => activeFilter === 'All' || p.category === activeFilter).map((project, i) => (
+              {PROJECTS.filter(p => {
+                const matchesFilter = activeFilter === 'All' || p.category === activeFilter;
+                const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                      p.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                      p.tech.some(t => t.toLowerCase().includes(searchQuery.toLowerCase()));
+                return matchesFilter && matchesSearch;
+              }).map((project, i) => (
                 <div key={project.id} className={`project-card ${i === 0 ? 's-up' : (i % 2 === 0 ? 's-right' : 's-left')} d${i + 2}`}>
                   <div className="project-image-wrap">
                     <img src={project.image} alt={project.title} className="project-image" />
@@ -601,6 +671,32 @@ const App = () => {
           </div>
         </section>
 
+        {/* TESTIMONIALS */}
+        <section id="testimonials">
+          <div className="container">
+            <div className="section-label s-up d0">Feedback</div>
+            <h2 className="section-title s-up d1">What people say</h2>
+            
+            <div className="testimonials-slider s-up d2">
+              {TESTIMONIALS.map((testimonial) => (
+                <div key={testimonial.id} className="testimonial-card">
+                  <div className="testimonial-stars">
+                    {'★'.repeat(testimonial.rating)}
+                  </div>
+                  <p className="testimonial-text">"{testimonial.text}"</p>
+                  <div className="testimonial-author">
+                    <div className="testimonial-avatar">{testimonial.name.charAt(0)}</div>
+                    <div>
+                      <div className="testimonial-name">{testimonial.name}</div>
+                      <div className="testimonial-role">{testimonial.role}</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* CONTACT */}
         <section id="contact">
           <div className="container">
@@ -625,16 +721,16 @@ const App = () => {
                   <textarea id="message" name="message" className="form-control" placeholder="Tell me about your project..." required></textarea>
                 </div>
                 <div className="form-group full">
-                  <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} disabled={formStatus === 'submitting' || formStatus === 'success'}>
+                  <button type="submit" className="btn btn-primary magnetic" style={{ width: '100%', justifyContent: 'center' }} disabled={formStatus === 'submitting' || formStatus === 'success'}>
                     {formStatus === 'submitting' ? 'Sending...' : formStatus === 'success' ? 'Message Sent! ✅' : formStatus === 'error' ? 'Failed! Try Again ❌' : 'Send Message 🚀'}
                   </button>
                 </div>
               </form>
 
               <div className="social-links">
-                <a href="https://github.com/Sunhith9" target="_blank" rel="noreferrer" className="social-link">GitHub</a>
-                <a href="https://www.linkedin.com/in/kande-sunhith-10aa1b326" target="_blank" rel="noreferrer" className="social-link">LinkedIn</a>
-                <a href="/resume/resume.pdf" download className="social-link">Resume ↓</a>
+                <a href="https://github.com/Sunhith9" target="_blank" rel="noreferrer" className="social-link magnetic">GitHub</a>
+                <a href="https://www.linkedin.com/in/kande-sunhith-10aa1b326" target="_blank" rel="noreferrer" className="social-link magnetic">LinkedIn</a>
+                <a href="/resume/resume.pdf" download className="social-link magnetic">Resume ↓</a>
               </div>
             </div>
           </div>
@@ -674,10 +770,10 @@ const App = () => {
 
       {/* FLOATING ACTIONS */}
       <div className={`floating-actions ${showFloating ? 'visible' : ''}`}>
-        <a href="https://wa.me/910000000000" target="_blank" rel="noreferrer" className="float-btn float-wa" aria-label="WhatsApp">
+        <a href="https://wa.me/910000000000" target="_blank" rel="noreferrer" className="float-btn float-wa magnetic" aria-label="WhatsApp">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
         </a>
-        <button className="float-btn float-top" onClick={() => window.scrollTo({top:0, behavior:'smooth'})} aria-label="Back to Top">
+        <button className="float-btn float-top magnetic" onClick={() => window.scrollTo({top:0, behavior:'smooth'})} aria-label="Back to Top">
           ↑
         </button>
       </div>
