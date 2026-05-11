@@ -253,6 +253,7 @@ const App = () => {
   const [activeCert, setActiveCert] = useState(null);
   const [formStatus, setFormStatus] = useState('idle');
   const [isLoading, setIsLoading] = useState(true);
+  const [loadingProgress, setLoadingProgress] = useState(0);
   const [activeFilter, setActiveFilter] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -260,6 +261,21 @@ const App = () => {
   const [showFloating, setShowFloating] = useState(false);
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
   const [openFaq, setOpenFaq] = useState(null);
+
+  // Loading Animation
+  useEffect(() => {
+    let current = 0;
+    const interval = setInterval(() => {
+      current += Math.floor(Math.random() * 15) + 5;
+      if (current >= 100) {
+        current = 100;
+        clearInterval(interval);
+        setTimeout(() => setIsLoading(false), 400); // Small pause at 100%
+      }
+      setLoadingProgress(current);
+    }, 100);
+    return () => clearInterval(interval);
+  }, []);
 
   // Apply Theme
   useEffect(() => {
@@ -495,6 +511,7 @@ const App = () => {
     <>
       <div className={`splash-loader ${isLoading ? '' : 'hidden'}`}>
         <div className="loader-logo">SK</div>
+        <div className="loader-progress">{loadingProgress}%</div>
       </div>
 
       <nav>
@@ -771,6 +788,19 @@ const App = () => {
                 <a href="https://github.com/Sunhith9" target="_blank" rel="noreferrer" className="social-link magnetic">GitHub</a>
                 <a href="https://www.linkedin.com/in/kande-sunhith-10aa1b326" target="_blank" rel="noreferrer" className="social-link magnetic">LinkedIn</a>
                 <a href="/resume/resume.pdf" download className="social-link magnetic">Resume ↓</a>
+              </div>
+
+              <div className="contact-map-wrapper">
+                <iframe 
+                  title="Hyderabad Location"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.326266299863!2d78.4744!3d17.3850!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb99daeaebd2c7%3A0xae93b78392bafbc2!2sHyderabad%2C%20Telangana!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" 
+                  width="100%" 
+                  height="100%" 
+                  style={{ border: 0 }} 
+                  allowFullScreen="" 
+                  loading="lazy" 
+                  referrerPolicy="no-referrer-when-downgrade">
+                </iframe>
               </div>
             </div>
           </div>

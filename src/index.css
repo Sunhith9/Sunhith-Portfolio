@@ -374,14 +374,19 @@ nav {
 .form-control:focus { outline: none; border-color: var(--accent); background: rgba(108, 99, 255, 0.05); box-shadow: 0 0 20px rgba(108, 99, 255, 0.1); }
 textarea.form-control { min-height: 120px; resize: vertical; }
 
+.contact-map-wrapper { width: 100%; height: 250px; margin-top: 3rem; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); }
+.contact-map-wrapper iframe { filter: grayscale(100%) invert(92%) contrast(83%); transition: filter 0.3s; }
+body.light-theme .contact-map-wrapper iframe { filter: none; }
+
 /* ══ FOOTER ══ */
 footer { background: var(--bg); padding: 3rem 2rem; text-align: center; border-top: 1px solid var(--border); font-family: 'DM Mono', monospace; font-size: .7rem; color: var(--muted); letter-spacing: .06em; }
 footer span { color: var(--text); }
 
 /* ══ SPLASH LOADER ══ */
-.splash-loader { position: fixed; inset: 0; background: var(--bg); z-index: 10000; display: flex; align-items: center; justify-content: center; transition: opacity .6s cubic-bezier(0.8, 0, 0.2, 1), visibility .6s cubic-bezier(0.8, 0, 0.2, 1); }
-.splash-loader.hidden { opacity: 0; visibility: hidden; }
-.loader-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(3rem, 10vw, 6rem); background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: sPulse 1s ease-in-out infinite alternate; letter-spacing: -0.05em; }
+.splash-loader { position: fixed; inset: 0; background: var(--bg); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: transform 0.8s cubic-bezier(0.8, 0, 0.2, 1); transform: translateY(0); }
+.splash-loader.hidden { transform: translateY(-100%); }
+.loader-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(3rem, 10vw, 6rem); background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.05em; }
+.loader-progress { font-family: 'DM Mono', monospace; font-size: 1.5rem; color: var(--text); margin-top: 1rem; opacity: 0.7; }
 
 /* ══ PROJECT FILTERS ══ */
 .project-filter-row { display: flex; flex-wrap: wrap; justify-content: center; gap: .8rem; margin-bottom: 3.5rem; }
